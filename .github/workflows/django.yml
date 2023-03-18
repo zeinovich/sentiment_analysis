@@ -27,7 +27,8 @@ jobs:
         pip install -r requirements.txt
     - name: Unzip model
       run: |
-        unzip web_app/bert/ml_models/bert_trained.zip
+        cd web_app
+        unzip bert/ml_models/bert_trained.zip
         sha256sum bert/ml_models/bert_trained.pkl
         echo 3ab1fb9cae335b2d9808131159c0f1670fe2002b9d0c7b16c78ee8a6750a224a
     - name: Run Tests
