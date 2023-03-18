@@ -1,5 +1,5 @@
 import torch
-from transformers import BertTokenizer
+from transformers import BertTokenizer, BertForSequenceClassification
 import logging
 
 LOGGER = logging.getLogger(__name__)
@@ -30,9 +30,17 @@ class BERT:
             make_prediction: Makes the prediction of the input data.
         '''
 
-        MODEL_PATH = "bert/ml_models/bert_trained.pt"
+        MODEL_PATH = "bert/ml_models/bert_trained.pkl"
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        self.model = torch.load(MODEL_PATH, map_location=self.device)
+        state_dict = torch.load(MODEL_PATH, map_location=self.device)
+        self.model = BertForSequenceClassification.from_pretrained(
+            "bert-base-uncased",
+            num_labels = 8,
+            state_dict=state_dict,
+            output_attentions = False, 
+            output_hidden_states = False 
+        )
+
         self.tokenizer = BertTokenizer.from_pretrained(
             "bert-base-uncased", do_lower_case=True
         )
